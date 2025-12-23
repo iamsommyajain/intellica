@@ -1,7 +1,28 @@
+"use client";
+
+import { useEffect, useState } from "react";
+import { useSearchParams, useRouter } from "next/navigation";
 import { Button } from "../../components/ui/button";
 import { CheckCircle, ArrowRight } from "lucide-react";
 
 export default function Profile() {
+  const searchParams = useSearchParams();
+  const router = useRouter();
+  const userId = searchParams.get("userId"); // get userId from query params
+  const [user, setUser] = useState<any>(null);
+
+  // Fetch user data
+  useEffect(() => {
+    if (userId) {
+      fetch(`http://localhost:5000/user/${userId}`)
+        .then(res => res.json())
+        .then(data => setUser(data))
+        .catch(err => console.error(err));
+    }
+  }, [userId]);
+
+  if (!user) return <div className="text-center mt-10">Loading profile...</div>;
+
   return (
     <div className="container mx-auto px-4 py-8">
       <h1 className="text-3xl font-bold text-maroon mb-8 text-center">Profile</h1>
@@ -10,16 +31,25 @@ export default function Profile() {
       <div className="bg-white/90 p-6 rounded-lg shadow-lg max-w-md mx-auto">
         <h2 className="text-2xl font-semibold text-orange-700 mb-4">Your Profile</h2>
         <div className="space-y-4 text-black">
-          <p><strong>Name:</strong> Samridh</p>
-          <p><strong>Email:</strong> Samridh@example.com</p>
-          <p><strong>Contact Number:</strong> +91 8376XXXXXX</p>
+          <p><strong>Name:</strong> {user.name}</p>
+          <p><strong>Email:</strong> {user.email}</p>
+          <p><strong>Degree:</strong> {user.education_level || "-"}</p>
+          <p><strong>Specialization:</strong> {user.specialization || "-"}</p>
+          <p><strong>Learning Type:</strong> {user.learning_style || "-"}</p>
+          <p><strong>Budget:</strong> {user.budget ? `$${user.budget}` : "-"}</p>
         </div>
 
         {/* Buttons */}
-        <Button className="mt-6 w-full bg-orange-500 text-white hover:bg-maroon hover:text-cream transition-colors">
+        <Button
+          className="mt-6 w-full bg-orange-500 text-white hover:bg-maroon hover:text-cream transition-colors"
+          onClick={() => router.push("/edit-profile")}
+        >
           Edit Profile
         </Button>
-        <Button className="mt-2 w-full bg-red-600 text-white hover:bg-red-700">
+        <Button
+          className="mt-2 w-full bg-red-600 text-white hover:bg-red-700"
+          onClick={() => router.push("/")}
+        >
           Logout
         </Button>
       </div>
@@ -32,18 +62,14 @@ export default function Profile() {
         <div>
           <h4 className="text-lg font-semibold text-orange-700 mb-2">Completed Courses</h4>
           <ul className="list-none space-y-2 text-black">
-            <li className="flex items-center">
-              <CheckCircle className="w-5 h-5 text-green-500 mr-2" />
-              Machine Learning Basics
-            </li>
-            <li className="flex items-center">
-              <CheckCircle className="w-5 h-5 text-green-500 mr-2" />
-              Advanced Python Programming
-            </li>
-            <li className="flex items-center">
-              <CheckCircle className="w-5 h-5 text-green-500 mr-2" />
-              Deep Learning with TensorFlow
-            </li>
+            {user.completedCourses?.length
+              ? user.completedCourses.map((course: string, idx: number) => (
+                  <li key={idx} className="flex items-center">
+                    <CheckCircle className="w-5 h-5 text-green-500 mr-2" />
+                    {course}
+                  </li>
+                ))
+              : <li>No completed courses yet</li>}
           </ul>
         </div>
 
@@ -51,18 +77,16 @@ export default function Profile() {
         <div className="mt-6">
           <h4 className="text-lg font-semibold text-orange-700 mb-2">In-Progress Courses</h4>
           <div className="space-y-4">
-            <div className="flex justify-between items-center bg-gray-100 p-3 rounded-lg">
-              <span className="text-black">Natural Language Processing</span>
-              <Button className="bg-orange-500 text-white hover:bg-maroon flex items-center">
-                Continue <ArrowRight className="w-4 h-4 ml-2" />
-              </Button>
-            </div>
-            <div className="flex justify-between items-center bg-gray-100 p-3 rounded-lg">
-              <span className="text-black">Data Structures & Algorithms</span>
-              <Button className="bg-orange-500 text-white hover:bg-maroon flex items-center">
-                Continue <ArrowRight className="w-4 h-4 ml-2" />
-              </Button>
-            </div>
+            {user.inProgressCourses?.length
+              ? user.inProgressCourses.map((course: string, idx: number) => (
+                  <div key={idx} className="flex justify-between items-center bg-gray-100 p-3 rounded-lg">
+                    <span className="text-black">{course}</span>
+                    <Button className="bg-orange-500 text-white hover:bg-maroon flex items-center">
+                      Continue <ArrowRight className="w-4 h-4 ml-2" />
+                    </Button>
+                  </div>
+                ))
+              : <div>No courses in progress</div>}
           </div>
         </div>
       </div>

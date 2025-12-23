@@ -75,7 +75,7 @@ export default function Courses() {
         <Input
           id="user_id"
           placeholder="Enter User ID"
-          className="caret-black text-black placeholder-black mb-4"
+          className="black text-black placeholder-black mb-4"
           value={userId}
           onChange={(e) => setUserId(e.target.value)}
         />
