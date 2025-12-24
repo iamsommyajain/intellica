@@ -1,11 +1,10 @@
 import User from "../models/User.js";
-import bcrypt from "bcryptjs";
 import nodemailer from "nodemailer";
 
 /* REGISTER */
 export const registerUser = async (req, res) => {
   try {
-    const { name, email, password, education_level, specialization, learning_style, budget } = req.body;
+    const { name, email, education_level, specialization, learning_style, budget } = req.body;
 
     // Simple validation
     if (!name || !email) {
@@ -17,7 +16,6 @@ export const registerUser = async (req, res) => {
     if (existingUser) {
       return res.status(400).json({ message: "User already exists" });
     }
-
     // Generate OTP
     const otp = Math.floor(100000 + Math.random() * 900000).toString();
 
@@ -25,7 +23,6 @@ export const registerUser = async (req, res) => {
     const user = await User.create({
   name,
   email,
-  password: hashedPassword,
   otp,
   otpExpiry: Date.now() + 10 * 60 * 1000,
   education_level,
@@ -85,9 +82,23 @@ export const verifyOTP = async (req, res) => {
     user.otpExpiry = undefined;
     await user.save();
 
-    res.json({ message: "Email verified successfully" });
+    res.json({ message: "Email verified successfully",
+      userId: user._id,
+    });
   } catch (error) {
     console.error("Error in verifyOTP:", error);
     res.status(500).json({ message: "Server error. Please try again." });
+  }
+};
+
+export const getUserProfile = async (req, res) => {
+  try {
+    const user = await User.findById(req.params.id).select("-password -otp");
+    if (!user) {
+      return res.status(404).json({ message: "User not found" });
+    }
+    res.json(user);
+  } catch (error) {
+    res.status(500).json({ message: error.message });
   }
 };

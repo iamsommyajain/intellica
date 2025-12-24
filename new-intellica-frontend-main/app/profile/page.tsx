@@ -5,11 +5,26 @@ import { useSearchParams, useRouter } from "next/navigation";
 import { Button } from "../../components/ui/button";
 import { CheckCircle, ArrowRight } from "lucide-react";
 
+
+interface User {
+  id: string;
+  name: string;
+  email: string;
+  education_level?: string;
+  specialization?: string;
+  learning_style?: string;
+  budget?: number;
+  completedCourses?: string[];
+  inProgressCourses?: string[];
+}
+
+
 export default function Profile() {
   const searchParams = useSearchParams();
   const router = useRouter();
   const userId = searchParams.get("userId"); // get userId from query params
-  const [user, setUser] = useState<any>(null);
+  const [user, setUser] = useState<User | null>(null);
+
 
   // Fetch user data
   useEffect(() => {
