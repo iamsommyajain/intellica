@@ -1,9 +1,12 @@
 import express from "express";
-import { registerUser, verifyOTP } from "../controllers/userController.js";
+import { registerUser, verifyOTP, loginWithOTP} from "../controllers/userController.js";
+import User from "../models/User.js";
+
 
 const router = express.Router();
 
 router.post("/register", registerUser);
+router.post("/login", loginWithOTP); 
 router.post("/verify_otp", verifyOTP);
 
 // Get user by ID

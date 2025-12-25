@@ -230,6 +230,20 @@ const handleSendOTP = async () => {
             Your <b>User ID</b>: {userId}
           </div>
         )}
+        {/* Already a user */}
+<div className="text-center mt-6">
+  <p className="text-black">
+    Already have an account?{" "}
+    <button
+      type="button"
+      onClick={() => router.push("/login")}
+      className="text-orange-600 font-semibold hover:underline"
+    >
+      Login here
+    </button>
+  </p>
+</div>
+
       </form>
     </div>
   );
