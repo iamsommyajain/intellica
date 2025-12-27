@@ -35,7 +35,7 @@ export default function DailyContent() {
 
     try {
       const response = await fetch(
-        `https://visionx-backend.onrender.com/daily-content?interest=${encodeURIComponent(interest)}`
+        `http://localhost:5000/daily-content?interest=${encodeURIComponent(interest)}`
       );
 
       if (!response.ok) {
@@ -84,7 +84,7 @@ export default function DailyContent() {
       {dailyContent && (
         <div className="mt-8 space-y-6">
           <div className="bg-white p-6 rounded-lg shadow-md">
-            <h2 className="text-xl font-semibold mb-2">🧩 Problem of the Day</h2>
+            <h2 className="text-xl font-semibold mb-2 text-red-600">🧩 Problem of the Day</h2>
             <p className="text-gray-800">{dailyContent.problem_of_the_day.problem}</p>
             <p className="text-gray-500 mt-2">
               💡 Hint: {dailyContent.problem_of_the_day.hint}
@@ -92,7 +92,7 @@ export default function DailyContent() {
           </div>
 
           <div className="bg-white p-6 rounded-lg shadow-md">
-            <h2 className="text-xl font-semibold mb-4">📰 Latest News</h2>
+            <h2 className="text-xl font-semibold mb-4 text-red-600">📰 Latest News</h2>
             <div className="space-y-4">
               {dailyContent.news_articles.map((article, idx) => (
                 <a
@@ -102,7 +102,7 @@ export default function DailyContent() {
                   rel="noopener noreferrer"
                   className="block p-4 rounded-lg bg-gray-100 hover:bg-gray-200"
                 >
-                  <h3 className="font-semibold">{article.title}</h3>
+                  <h3 className="text-maroon font-semibold">{article.title}</h3>
                   <p className="text-gray-600 text-sm">{article.summary}</p>
                   <span className="text-orange-500 text-xs">
                     {article.source}
