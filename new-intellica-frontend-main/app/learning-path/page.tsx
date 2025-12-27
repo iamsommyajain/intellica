@@ -7,8 +7,10 @@ import { Label } from "../../components/ui/label";
 import { Textarea } from "../../components/ui/textarea";
 
 interface LearningPathData {
-  learning_path: string[];
+  steps: string[];
+  resources: string[];
 }
+
 
 export default function LearningPath() {
   const [goal, setGoal] = useState("");
@@ -29,16 +31,11 @@ export default function LearningPath() {
 
     setLoading(true);
     try {
-      const response = await fetch("https://visionx-backend.onrender.com/learning/generate_learning_path/", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({
-          user_id: "test-user",
-          goal,
-          send_email: sendEmail,
-          user_email: sendEmail ? userEmail : undefined,
-        }),
-      });
+      const response = await fetch("http://localhost:5000/learning/generate_learning_path", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ goal }),
+    });
 
       const data = await response.json();
       console.log("🔍 API Response:", data);
@@ -65,7 +62,7 @@ export default function LearningPath() {
       <Textarea
         value={goal}
         onChange={(e) => setGoal(e.target.value)}
-        className="mb-4 w-full p-2 border rounded-lg"
+        className="mb-4 w-full p-2 border rounded-lg text-black"
         placeholder="E.g. I want to become a full-stack developer with Web3 and AI integration..."
       />
 
@@ -91,16 +88,36 @@ export default function LearningPath() {
       {message && <p className="text-red-600 mt-4 font-semibold">{message}</p>}
 
       {/* Display Learning Path */}
-      {learningPath?.learning_path && (
-        <div className="mt-8 bg-white p-6 rounded-lg shadow-md">
-          <h2 className="text-xl font-bold text-maroon mb-4">📚 Your Learning Path</h2>
-          <ul className="list-disc pl-5 space-y-2">
-            {learningPath.learning_path.map((step, index) => (
-              <li key={index} className="text-gray-700">{step}</li>
-            ))}
-          </ul>
-        </div>
-      )}
+      {learningPath && (
+  <div className="mt-8 bg-white p-6 rounded-lg shadow-md space-y-6">
+    <div>
+      <h2 className="text-xl font-bold text-maroon mb-4">
+        📚 Your Learning Path
+      </h2>
+      <ul className="list-disc pl-5 space-y-2">
+        {learningPath.steps.map((step, index) => (
+          <li key={index} className="text-gray-700">
+            {step}
+          </li>
+        ))}
+      </ul>
     </div>
-  );
+
+    <div>
+      <h2 className="text-xl font-bold text-maroon mb-4">
+        🔗 Recommended Resources
+      </h2>
+      <ul className="list-disc pl-5 space-y-2">
+        {learningPath.resources.map((resource, index) => (
+          <li key={index} className="text-gray-700">
+            {resource}
+          </li>
+        ))}
+      </ul>
+    </div>
+  </div>
+)}
+
+  
+</div>  );
 }

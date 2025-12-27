@@ -6,6 +6,7 @@ import userRoutes from "./routes/userRoutes.js";
 import dailyContentRoutes from "./routes/dailyContent.routes.js";
 import path from "path";
 import { fileURLToPath } from "url";
+import learningPathRoutes from "./routes/learningPath.routes.js";
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
@@ -29,6 +30,7 @@ app.use(express.json());
 app.use("/user", userRoutes);
 console.log("Mounting dailyContent routes");
 app.use("/daily-content", dailyContentRoutes);
+app.use("/learning", learningPathRoutes);
 
 app.get("/", (_, res) => {
   res.send("Intellica Backend Running");
