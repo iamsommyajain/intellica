@@ -3,8 +3,18 @@ import cors from "cors";
 import dotenv from "dotenv";
 import connectDB from "./config/db.js";
 import userRoutes from "./routes/userRoutes.js";
+import dailyContentRoutes from "./routes/dailyContent.routes.js";
+import path from "path";
+import { fileURLToPath } from "url";
 
-dotenv.config();
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = path.dirname(__filename);
+
+dotenv.config({
+  path: path.resolve(__dirname, "../.env"),
+});
+
+console.log(process.env.GROQ_API_KEY);
 connectDB();
 
 const app = express();
@@ -17,6 +27,8 @@ app.use(cors());
 app.use(express.json());
 
 app.use("/user", userRoutes);
+console.log("Mounting dailyContent routes");
+app.use("/daily-content", dailyContentRoutes);
 
 app.get("/", (_, res) => {
   res.send("Intellica Backend Running");
