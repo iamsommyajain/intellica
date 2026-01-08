@@ -62,17 +62,19 @@ export default function YouTubeSummaries() {
       <h1 className="text-3xl font-bold text-maroon mb-8">YouTube Video Summaries</h1>
 
       <div className="bg-white p-6 rounded-lg shadow-lg">
-        <Label className="block text-maroon">Enter YouTube Video URL</Label>
+        <Label htmlFor="youtube-url" className="block text-maroon">Enter YouTube Video URL</Label>
         <Input
           value={youtubeUrl}
           onChange={(e) => setYoutubeUrl(e.target.value)}
-          className="mb-4"
+          className="mb-4 text-black"
           placeholder="https://www.youtube.com/watch?v=example"
         />
 
-        <Label className="block text-maroon">Select Language</Label>
+        <Label htmlFor="language-select" className="block text-maroon">Select Language</Label>
         <select
-          className="w-full p-2 border border-gray-300 rounded-lg mb-4"
+          id="language-select" 
+          aria-label="Select Language"
+          className="w-full p-2 border border-gray-300 rounded-lg mb-4 text-black"
           value={language}
           onChange={(e) => setLanguage(e.target.value)}
         >
@@ -91,17 +93,19 @@ export default function YouTubeSummaries() {
 
         <div className="flex items-center mb-4">
           <input
+            aria-label="Send Summary via Email"
+            id="send-email-checkbox"
             type="checkbox"
             checked={sendEmail}
             onChange={() => setSendEmail(!sendEmail)}
             className="mr-2"
           />
-          <Label>Send Summary via Email</Label>
+          <Label htmlFor="send-email-checkbox">Send Summary via Email</Label>
         </div>
 
         {sendEmail && (
           <>
-            <Label className="block text-maroon">Enter Email</Label>
+            <Label htmlFor="user-email" className="block text-maroon">Enter Email</Label>
             <Input
               value={userEmail}
               onChange={(e) => setUserEmail(e.target.value)}

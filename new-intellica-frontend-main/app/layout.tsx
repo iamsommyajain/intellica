@@ -16,7 +16,7 @@ export const metadata = {
 export default function RootLayout({ children }: { children: React.ReactNode }) {
   return (
     <html lang="en">
-      <body className={`${inter.className} bg-gradient-to-br from-cream via-orange-50 to-cream min-h-screen`}>
+      <body suppressHydrationWarning className={`${inter.className} bg-gradient-to-br from-cream via-orange-50 to-cream min-h-screen`}>
         <WaveBackground />
         <Header />
 
